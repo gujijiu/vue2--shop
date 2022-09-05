@@ -6,6 +6,7 @@ import Login from '@/views/Login';
 import Register from '@/views/Register';
 import Detail from '@/views/Detail';
 import AddCartSuccess from '@/views/AddCartSuccess';
+import ShopCart from '@/views/ShopCart';
 export default[
     {
         path: '/home',
@@ -41,7 +42,11 @@ export default[
         path:'/addcartsuccess',
         component: AddCartSuccess,
         meta:{show: true},
-        // props:($router)=>({goodsId:$router.params.goodsId}),
+    },
+    {
+        path:'/shopcart',
+        component: ShopCart,
+        meta:{show: true},
     },
     {
         path:'*',
