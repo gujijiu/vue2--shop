@@ -13,22 +13,22 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="(cartInfo,index) in cartInfoList" :key="cartInfo.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cartInfo.isChecked">
+            <input type="checkbox" name="chk_list" :checked="cartInfo.isChecked==1">
           </li>
           <li class="cart-list-con2">
             <img :src="cartInfo.imgUrl">
-            <div class="item-msg">{{cartInfo.skuName}}.00</div>
+            <div class="item-msg">{{cartInfo.skuName}}</div>
           </li>
           <li class="cart-list-con4">
-            <span class="price">{{cartInfo.skuPrice}}</span>
+            <span class="price">{{cartInfo.skuPrice}}.00</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a @click="cartInfo.skuNum>0 ?cartInfo.skuNum--:cartInfo.skuNum==0" class="mins">-</a>
+            <input autocomplete="off" type="text" v-model="cartInfo.skuNum" minnum="1" class="itxt">
+            <a @click="cartInfo.skuNum++" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
-            <span class="sum">{{cartInfo.skuNum}}</span>
+            <span class="sum">{{cartInfo.skuNum * cartInfo.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
             <a href="#none" class="sindelet">删除</a>
@@ -53,7 +53,7 @@
           <span>0</span>件商品</div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{totalPrice}}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -83,6 +83,13 @@
       }),
       cartInfoList(){
         return this.cartList.cartInfoList || [];
+      },
+      totalPrice(){
+        return this.cartInfoList.filter((item)=>{
+          return item.isChecked == 1;
+        }).reduce((oldValue,value)=>{
+          return oldValue.skuNum*oldValue.skuPrice + value.skuPrice*value.skuNum;
+        });
       }
     }
   }
