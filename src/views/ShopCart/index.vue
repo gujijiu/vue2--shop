@@ -13,7 +13,7 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="(cartInfo,index) in cartInfoList" :key="cartInfo.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cartInfo.isChecked==1">
+            <input type="checkbox" name="chk_list" :checked="cartInfo.isChecked==1" @click="cartInfo.isChecked=!cartInfo.isChecked">
           </li>
           <li class="cart-list-con2">
             <img :src="cartInfo.imgUrl">
@@ -40,7 +40,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
+        <input class="chooseAll" type="checkbox" :checked="isAllChecked && cartInfoList.length>0">
         <span>全选</span>
       </div>
       <div class="option">
@@ -85,12 +85,47 @@
         return this.cartList.cartInfoList || [];
       },
       totalPrice(){
-        return this.cartInfoList.filter((item)=>{
+        // let sum = 0;
+        //解决this.cartInfoList可能在数据没回来的时候是个空数组 并且通过try catch 异步的特性捕获异常并保证代码正常运行
+        try {
+          //数组的filter方法可以筛选出符合的数据 reduce方法可以实现数组内元素之间的计算 （二者都首先具备遍历数组的功能）
+          return this.cartInfoList.filter((item)=>{
+            return item.isChecked == 1;
+          }).reduce((oldValue,value)=>{
+            return oldValue + value.skuPrice*value.skuNum;
+          },0);
+          
+          // let cartCheckedList = this.cartInfoList.filter((item)=>{
+          //   return item.isChecked == 1;
+          // });
+          // if(cartCheckedList.lenth != 1 && cartCheckedList.length > 0){
+          //   //console.log(cartCheckedList.length);
+          //   sum = cartCheckedList.reduce((oldValue,value)=>{
+          //     //console.log(oldValue,value);
+          //     return oldValue.skuNum*oldValue.skuPrice + value.skuPrice*value.skuNum;
+          //   });
+          // }else{
+          //   console.log(cartCheckedList.length);
+          //   sum = cartCheckedList[0].skuNum*cartCheckedList[0].skuPrice;
+          // }
+
+          // return this.cartInfoList.filter((item)=>{
+          //   return item.isChecked == 1;
+          // }).reduce((oldValue,value)=>{
+          //   console.log(oldValue,value);
+          //   return oldValue.skuNum*oldValue.skuPrice + value.skuPrice*value.skuNum;
+          // },0);
+        }catch(e){
+          return 0;
+        };
+        return 0;
+      },
+      isAllChecked(){
+        //every 1，首先具备遍历元素 2，判断数组内元素是否全部满足条件
+        return this.cartInfoList.every(item=>{
           return item.isChecked == 1;
-        }).reduce((oldValue,value)=>{
-          return oldValue.skuNum*oldValue.skuPrice + value.skuPrice*value.skuNum;
-        });
-      }
+        }) 
+      },
     }
   }
 </script>
