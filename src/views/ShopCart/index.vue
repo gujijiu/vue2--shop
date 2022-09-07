@@ -11,16 +11,16 @@
         <div class="cart-th6">操作</div>
       </div>
       <div class="cart-body">
-        <ul class="cart-list">
+        <ul class="cart-list" v-for="(cartInfo,index) in cartInfoList" :key="cartInfo.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list">
+            <input type="checkbox" name="chk_list" :checked="cartInfo.isChecked">
           </li>
           <li class="cart-list-con2">
-            <img src="./images/goods1.png">
-            <div class="item-msg">米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强</div>
+            <img :src="cartInfo.imgUrl">
+            <div class="item-msg">{{cartInfo.skuName}}.00</div>
           </li>
           <li class="cart-list-con4">
-            <span class="price">399.00</span>
+            <span class="price">{{cartInfo.skuPrice}}</span>
           </li>
           <li class="cart-list-con5">
             <a href="javascript:void(0)" class="mins">-</a>
@@ -28,7 +28,7 @@
             <a href="javascript:void(0)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
-            <span class="sum">399</span>
+            <span class="sum">{{cartInfo.skuNum}}</span>
           </li>
           <li class="cart-list-con7">
             <a href="#none" class="sindelet">删除</a>
@@ -64,8 +64,27 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex';
   export default {
     name: 'ShopCart',
+    //生命钩子 组件挂载完毕
+    mounted(){
+      this.getData();
+    },
+    //函数
+    methods:{
+      getData(){
+        this.$store.dispatch('shopcart/cartList');
+      }
+    },
+    computed:{
+      ...mapGetters({
+        cartList: 'shopcart/CartInfo'
+      }),
+      cartInfoList(){
+        return this.cartList.cartInfoList || [];
+      }
+    }
   }
 </script>
 

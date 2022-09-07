@@ -1,6 +1,8 @@
 import axios from "axios";
 import nprogress from "nprogress";
 import "nprogress/nprogress.css";
+//获取仓库:存储数据
+import store from "@/store";
 
 const requests = axios.create({
     //补全链接
@@ -11,6 +13,9 @@ const requests = axios.create({
 
 requests.interceptors.request.use((config)=>{
     //config：配置对象，对象里面有一个属性很重要，header请求头
+    if(store.state.detail.uuid_token){
+        config.headers.userTempId = store.state.detail.uuid_token;
+    }
     nprogress.start();
     return config;
 })

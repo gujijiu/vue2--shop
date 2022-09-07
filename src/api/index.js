@@ -18,3 +18,6 @@ export const reqGetGoodsInfo = (goodsId)=>requests({url: `/item/${goodsId}`,meth
 
 //产品加入购物车 或 更新购物车产品数量
 export const reqPostAddOrUpdateShopCart = (goodsId,goodsNum)=>requests({url: `/cart/addToCart/${goodsId}/${goodsNum}`,method: 'post'});
+
+//获取购物车数据
+export const reqGetCartList=()=>requests({url: '/cart/cartList',method: 'get'});

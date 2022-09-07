@@ -1,10 +1,13 @@
 //home 小仓库
 import { reqGetGoodsInfo,reqPostAddOrUpdateShopCart } from '@/api';
+//生成一个随机id
+import {getUUID} from '@/utils/uuid_token';
 
 //state 仓库存储数据的地方
 const state ={
     // 根据接口返回值进行初始化
     detailInfo: {},
+    uuid_token:getUUID()
 };
 //mutations 修改state的唯一手段
 const mutations = {
