@@ -91,6 +91,13 @@
             //cartInfo.skuNum>1?cartInfo.skuNum--:cartInfo.skuNum=0;
             break;
           case 'change':
+            //判断输入是否为非法字符
+            if(isNaN(disNum) || disNum < 1){
+              // console.log(11);
+              disNum = 0;
+            }else{
+              disNum = parseInt(disNum) - cartInfo.skuNum;
+            }
             break;
         }
         //派发action
