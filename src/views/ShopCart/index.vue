@@ -23,9 +23,9 @@
             <span class="price">{{cartInfo.skuPrice}}.00</span>
           </li>
           <li class="cart-list-con5">
-            <a @click="cartInfo.skuNum>0 ?cartInfo.skuNum--:cartInfo.skuNum==0" class="mins">-</a>
-            <input autocomplete="off" type="text" v-model="cartInfo.skuNum" minnum="1" class="itxt">
-            <a @click="cartInfo.skuNum++" class="plus">+</a>
+            <a @click="skuNumHandler('minus',-1,cartInfo)" class="mins">-</a>
+            <input autocomplete="off" type="text" :value="cartInfo.skuNum" minnum="1" class="itxt" @change="skuNumHandler('change',$event.target.value,cartInfo)">
+            <a @click="skuNumHandler('add',1,cartInfo)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{cartInfo.skuNum * cartInfo.skuPrice}}</span>
@@ -65,6 +65,8 @@
 
 <script>
   import {mapGetters} from 'vuex';
+  //这种引入是全部引入
+  import throttle from 'lodash/throttle';
   export default {
     name: 'ShopCart',
     //生命钩子 组件挂载完毕
@@ -75,7 +77,30 @@
     methods:{
       getData(){
         this.$store.dispatch('shopcart/cartList');
-      }
+      },
+      //点过快的话可以用节流 之前lodash讲的节流handle:  throttle ( async function(type,disNum,cart){}）
+      skuNumHandler:throttle(function(type,disNum,cartInfo){
+        switch(type){
+          case 'add':
+            disNum=1;
+            //cartInfo.skuNum++;
+            break;
+          case 'minus':
+            // if(cartInfo.skuNum <= 0)disNum=0;
+            disNum = cartInfo.skuNum>1?-1:0;
+            //cartInfo.skuNum>1?cartInfo.skuNum--:cartInfo.skuNum=0;
+            break;
+          case 'change':
+            break;
+        }
+        //派发action
+        try {
+          this.$store.dispatch('detail/addOrUpdateShouCart',{goodsId:cartInfo.skuId,goodsNum:disNum});
+          this.getData();
+        } catch (error) {
+          
+        }
+      })
     },
     computed:{
       ...mapGetters({
