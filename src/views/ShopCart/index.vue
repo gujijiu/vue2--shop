@@ -13,7 +13,7 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="(cartInfo,index) in cartInfoList" :key="cartInfo.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cartInfo.isChecked==1" @click="cartInfo.isChecked=!cartInfo.isChecked">
+            <input type="checkbox" name="chk_list" :checked="cartInfo.isChecked==1" @click="updateChecked(cartInfo,$event)">
           </li>
           <li class="cart-list-con2">
             <img :src="cartInfo.imgUrl">
@@ -31,7 +31,7 @@
             <span class="sum">{{cartInfo.skuNum * cartInfo.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a @click="deleteCartGoods(cartInfo.skuId)" class="sindelet">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -79,7 +79,8 @@
         this.$store.dispatch('shopcart/cartList');
       },
       //点过快的话可以用节流 之前lodash讲的节流handle:  throttle ( async function(type,disNum,cart){}）
-      skuNumHandler:throttle(function(type,disNum,cartInfo){
+      // 研究了一下午，写的防抖和节流都有bug，连点时会退到0。找不到原因 换了一种实现方法：用的disabled。
+      skuNumHandler:throttle(async function(type,disNum,cartInfo){
         switch(type){
           case 'add':
             disNum=1;
@@ -104,10 +105,31 @@
         try {
           this.$store.dispatch('detail/addOrUpdateShouCart',{goodsId:cartInfo.skuId,goodsNum:disNum});
           this.getData();
-        } catch (error) {
-          
+        } catch (error) {  
         }
-      })
+      },500),
+      //删除购物车商品
+      async deleteCartGoods(goodsId){
+        try {
+          //删除商品成功
+          await this.$store.dispatch('shopcart/deleteCartGoods',goodsId);
+          //再次获取购物车最新的数据
+          this.getData();
+        } catch (error) {
+          alert("删除失败");
+        }
+      },
+      //修改购物车某商品勾选状态
+      async updateChecked(cartInfo,event){
+        try {
+          let isChecked = event.target.checked?"1":"0";
+          this.$store.dispatch('shopcart/updateCartGoodsChecked',{goodsId:cartInfo.skuId,isChecked});
+          this.getData();
+          // cartInfo.isChecked=!cartInfo.isChecked;
+        } catch (error) {
+          alert(error.message);
+        }
+      }
     },
     computed:{
       ...mapGetters({
@@ -158,6 +180,11 @@
           return item.isChecked == 1;
         }) 
       },
+    },
+    watch: {
+      isAllChecked(){
+        console.log(this.isAllChecked)
+      }
     }
   }
 </script>

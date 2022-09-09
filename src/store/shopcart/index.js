@@ -1,5 +1,5 @@
 //home 小仓库
-import { reqGetCartList } from '@/api';
+import { reqGetCartList,reqDeleteCartById,reqUpdateCartGoodsChecked } from '@/api';
 
 //state 仓库存储数据的地方
 const state ={
@@ -21,6 +21,24 @@ const actions = {
         if(result.code === 200){
             // console.log(result.data);
             commit("CARTLIST",result.data);
+        }
+    },
+
+    async deleteCartGoods({ state, commit, dispatch}, goodsId){
+        let result = await reqDeleteCartById(goodsId);
+        if(result.code === 200){
+            return "ok";
+        }else{
+            return Promise.reject(new Error(result.message));
+        }
+    },
+
+    async updateCartGoodsChecked({ state, commit, dispatch}, {goodsId,isChecked}){
+        let result = await reqUpdateCartGoodsChecked(goodsId,isChecked);
+        if(result.code === 200){
+            return "ok";
+        }else{
+            return Promise.reject(new Error(result.message));
         }
     },
 };

@@ -21,3 +21,9 @@ export const reqPostAddOrUpdateShopCart = (goodsId,goodsNum)=>requests({url: `/c
 
 //获取购物车数据
 export const reqGetCartList=()=>requests({url: '/cart/cartList',method: 'get'});
+
+//删除购物车商品
+export const reqDeleteCartById=(goodsId)=>requests({url: `/cart/deleteCart/${goodsId}`,method: 'delete'});
+
+//修改购物车商品选中状态
+export const reqUpdateCartGoodsChecked=(goodsId,isChecked)=>requests({url: `/cart/checkCart/${goodsId}/${isChecked}`,method: 'get'});
