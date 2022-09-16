@@ -33,6 +33,20 @@ const actions = {
         }
     },
 
+    //删除购物车所有选中的商品
+    deleteAllCheckedCart({ getters,dispatch}){
+        //filter（item=>{return item == 1}).forEach()也行
+        let promiseAll = [];
+        getters.CartInfo.cartInfoList.forEach(item => {
+            // item.isChecked == 1 ? dispatch('deleteCartGoods',item.skuId) : '';
+            if (item.isChecked == 1) {
+                let promise = dispatch('deleteCartGoods', item.skuId);
+                promiseAll.push(promise);
+           }
+        });
+        return Promise.all(promiseAll);
+    },
+
     async updateCartGoodsChecked({ state, commit, dispatch}, {goodsId,isChecked}){
         let result = await reqUpdateCartGoodsChecked(goodsId,isChecked);
         if(result.code === 200){
@@ -46,7 +60,10 @@ const actions = {
 const getters = {
     CartInfo(state) {
         return state.shopCartInfo[0] || {};
-   },
+    },
+//     CartInfoList(state) {
+//         return state.shopCartInfo[0].cartInfoList || [];
+//    },
 };
 
 

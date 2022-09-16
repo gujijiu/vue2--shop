@@ -44,7 +44,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a @click="deleteCartCheckedGoods">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -119,6 +119,11 @@
           alert("删除失败");
         }
       },
+      //删除购物车所有选中的商品
+      deleteCartCheckedGoods(){
+        //派发一个action
+        this.$store.dispatch('shopcart/deleteAllCheckedCart')
+      },
       //修改购物车某商品勾选状态
       async updateChecked(cartInfo,event){
         try {
@@ -182,9 +187,9 @@
       },
     },
     watch: {
-      isAllChecked(){
-        console.log(this.isAllChecked)
-      }
+      // isAllChecked(){
+      //   console.log(this.isAllChecked)
+      // }
     }
   }
 </script>
