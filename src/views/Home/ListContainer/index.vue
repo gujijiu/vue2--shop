@@ -178,7 +178,8 @@ export default {
                         width: 25%;
 
                         .list-item {
-                            background-image: url(./images/icons.png);
+                            /* background-position调整图片位置来使用精灵图 */
+                            background-image: url(~@/assets/images/icons.png);
                             width: 61px;
                             height: 40px;
                             display: block;

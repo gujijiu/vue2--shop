@@ -40,7 +40,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isAllChecked && cartInfoList.length>0">
+        <input class="chooseAll" type="checkbox" :checked="isAllChecked && cartInfoList.length>0" @change="updateAllCartChecked($event)">
         <span>全选</span>
       </div>
       <div class="option">
@@ -67,6 +67,7 @@
   import {mapGetters} from 'vuex';
   //这种引入是全部引入
   import throttle from 'lodash/throttle';
+  import debounce from 'lodash/debounce';
   export default {
     name: 'ShopCart',
     //生命钩子 组件挂载完毕
@@ -120,21 +121,37 @@
         }
       },
       //删除购物车所有选中的商品
-      deleteCartCheckedGoods(){
-        //派发一个action
-        this.$store.dispatch('shopcart/deleteAllCheckedCart')
+      async deleteCartCheckedGoods(){
+        try {
+          //等待全部勾选商品删除以后
+          await this.$store.dispatch('shopcart/deleteAllCheckedCart');
+          //再次获取购物车的数据
+          this.getData();
+        } catch (error) {
+          alert('删除失败');
+        }
       },
       //修改购物车某商品勾选状态
       async updateChecked(cartInfo,event){
         try {
           let isChecked = event.target.checked?"1":"0";
-          this.$store.dispatch('shopcart/updateCartGoodsChecked',{goodsId:cartInfo.skuId,isChecked});
+          await this.$store.dispatch('shopcart/updateCartGoodsChecked',{goodsId:cartInfo.skuId,isChecked});
           this.getData();
           // cartInfo.isChecked=!cartInfo.isChecked;
         } catch (error) {
           alert(error.message);
         }
-      }
+      },
+      //修改全部商品的选中状态
+      updateAllCartChecked:debounce(async function(event){
+        try {
+          let isChecked = event.target.checked?"1":"0";
+          await this.$store.dispatch('shopcart/updateAllCheckedCart',isChecked);
+          this.getData();
+        } catch (error) {
+          alert(error.message);
+        }
+      },500),
     },
     computed:{
       ...mapGetters({
@@ -186,11 +203,6 @@
         }) 
       },
     },
-    watch: {
-      // isAllChecked(){
-      //   console.log(this.isAllChecked)
-      // }
-    }
   }
 </script>
 

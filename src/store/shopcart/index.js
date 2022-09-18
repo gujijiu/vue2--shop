@@ -55,6 +55,20 @@ const actions = {
             return Promise.reject(new Error(result.message));
         }
     },
+
+    updateAllCheckedCart({ state, dispatch }, isChecked){
+        let promiseAll = [];
+        state.shopCartInfo[0].cartInfoList.forEach(item => {
+            if(item.isChecked != isChecked) {
+                let promise = dispatch('updateCartGoodsChecked',{goodsId:item.skuId,isChecked});
+                promiseAll.push(promise);
+            }
+        });
+        //Promise.all():参数需要的是一个数组【数组里面需要promise】
+        //Promise.all()执行一次,返回的是一个Promise对象,Promise对象状态：成功、失败取决于什么?
+        //成功、还是失败取决于数组里面的promise状态:四个都成功、返回成功Promise、只要有一个失败、返回Promise失败状态！！！
+        return Promise.all(promiseAll);
+    },
 };
 //getters 理解为计算属性 用于简化仓库数据 让组件获取仓库的数据更加方便
 const getters = {
