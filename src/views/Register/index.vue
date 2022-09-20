@@ -8,32 +8,33 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号">
+        <input type="text" placeholder="请输入你的手机号" v-model="phone">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码">
-        <img ref="code" src="http://182.92.128.115/api/user/passport/code" alt="code">
+        <input type="text" placeholder="请输入验证码" v-model="code">
+        <button style="width: 100px;height: 38px;"  @click="getCode">获取验证码</button>
+        <!-- <img ref="code" src="http://182.92.128.115/api/user/passport/code" alt="code"> -->
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码">
+        <input type="password" placeholder="请输入你的登录密码" v-model="password">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码">
+        <input type="password" placeholder="请输入确认密码" v-model="truePassword">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox">
+        <input name="m1" type="checkbox" :checked="agree">
         <span>同意协议并注册《尚品汇用户协议》</span>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="userRegister">完成注册</button>
       </div>
     </div>
 
@@ -58,7 +59,41 @@
 
 <script>
   export default {
-    name: 'Register'
+    name: 'Register',
+    data(){
+      return {
+        //表单数据收集-手机号
+        phone:'',
+        // -验证码
+        code:'',
+        password:'',
+        truePassword:'',
+        agree:true,
+      }
+    },
+    methods: {
+      async getCode(){
+        const {phone} = this;
+        try {
+          phone && await this.$store.dispatch('user/getCode',phone);
+          // console.log(phone);
+          this.code = this.$store.state.user.code;
+        } catch (error) {
+          // console.log(this.$store.user.state.code);
+        }
+      },
+      async userRegister(){
+        try {
+          const {phone,code,password,truePassword,agree} = this;
+          // if(this.agree && password === truePassword){};
+          let result = phone && agree &&code && password && truePassword && password === truePassword &&  await this.$store.dispatch('user/userRegister',{phone,code,password});
+          // console.log(result);
+          if(result === 'ok') this.$router.push('/login');
+        } catch (error) {
+          alert(error.message);
+        }
+      },
+    },
   }
 </script>
 

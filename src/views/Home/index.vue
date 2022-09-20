@@ -32,6 +32,7 @@ export default {
     },
     mounted(){
         this.$store.dispatch('home/getFloorList');
+        this.$store.dispatch('user/userInfo');
     },
     computed:{
         ...mapState({

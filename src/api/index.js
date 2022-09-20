@@ -27,3 +27,18 @@ export const reqDeleteCartById=(goodsId)=>requests({url: `/cart/deleteCart/${goo
 
 //修改购物车商品选中状态
 export const reqUpdateCartGoodsChecked=(goodsId,isChecked)=>requests({url: `/cart/checkCart/${goodsId}/${isChecked}`,method: 'get'});
+
+//注册验证码获取
+export const reqGetCode=(phone)=>requests({url: `/user/passport/sendCode/${phone}`,method: 'get'});
+
+//用户注册
+export const reqUserRegister=(data)=>requests({url: `/user/passport/register`,method: 'post',data});
+
+//用户登录
+export const reqUserLogin=(data)=>requests({url: `/user/passport/login`,method: 'post',data});
+
+//用户退出登录
+export const reqUserLogout=()=>requests({url: `/user/passport/logout`,method: 'get'});
+
+//获取用户信息
+export const reqGetUserInfo=()=>requests({url: '/user/passport/auth/getUserInfo',method: 'get'});
