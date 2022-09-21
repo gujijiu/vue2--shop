@@ -68,7 +68,14 @@ export default {
             // }
         },
         async logout(){
-            await this.$store.dispatch('user/userLogout');
+            try {
+                //如果成功退出
+                await this.$store.dispatch('user/userLogout');
+                //回到首页
+                this.$router.push('/home');
+            } catch (error) {
+                
+            }
         }
     },
     mounted(){

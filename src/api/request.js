@@ -17,8 +17,8 @@ requests.interceptors.request.use((config)=>{
         config.headers.userTempId = store.state.detail.uuid_token;
     }
     //判断token是否存在
-    if(store.state.user.token){
-        config.headers.token = store.state.user.token;
+    if(localStorage.getItem("TOKEN")){
+        config.headers.token = localStorage.getItem("TOKEN");
     }
     nprogress.start();
     return config;
