@@ -7,8 +7,7 @@ Vue.use(VueRouter);
 //引入路由组件
 //引入路由配置
 import routes from './routes';
-//可以选择引入仓库或者直接判断本地token，我选择后者
-// import store from '@/store';
+import store from '@/store';
 //修复push raplace报错
 //备份push originRaplace
 let originPush = VueRouter.prototype.push;
@@ -38,7 +37,7 @@ let router = new VueRouter({
 });
 
 //全局路由守卫
-router.beforeEach((to,from,next)=>{
+router.beforeEach(async (to,from,next)=>{
     //to:可以获取到要前往哪个路由
     //from:可以获取到从哪个路由来的 参数
     //next:放行的函数 
@@ -46,14 +45,27 @@ router.beforeEach((to,from,next)=>{
     //放行到指定路由：next('指定路由');或者next({path:'指定路由'});
     //中断当前导航：next(false);
     //终止且错误传递给roter.onError()注册过的回调：next(error); 
+    let name = store.state.user.userInfo.name;
+    //可以选择引入仓库或者直接判断本地token，我选择后者
     if(localStorage.getItem("TOKEN")){
         if(to.path === '/login' || to.path === '/register'){
             next('/home');
         }else{
-            next();
+            if(name){
+                next();
+            }else{
+                try {
+                    await store.dispatch('user/userInfo');
+                    next();
+                } catch (error) {
+                    //token失效了
+                    await store.dispatch('logout');
+                    next('/login');
+                }
+            }
         }
     }else{
-
+        next();
     }
 });
 
