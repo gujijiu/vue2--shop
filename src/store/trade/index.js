@@ -1,19 +1,24 @@
 //home 小仓库
-import { reqGetUserAddressInfo,reqGeOrderInfo } from '@/api';
+import { reqGetUserAddressInfo,reqGeOrderInfo,submitOrder } from '@/api';
 
 //state 仓库存储数据的地方
 const state ={
     // 根据接口返回值进行初始化
-
+    addressInfo:[],
+    orderInfo:{},
+    payId:''
 };
 //mutations 修改state的唯一手段
 const mutations = {
     GETUSERADDRESS(state,address){
-        state.address = address;
+        state.addressInfo = address;
     },
     GETPRDERINFO(state,order){
-        state.order = order;
+        state.orderInfo = order;
     },
+    SUBMITINFO(state,payId){
+        state.payId = payId;
+    }
 };
 //action 处理action 可以书写自己的业务逻辑 也可以处理异步
 const actions = {
@@ -30,6 +35,15 @@ const actions = {
         if(result.code === 200){
             commit('GETPRDERINFO',result.data);
         }else{
+            return Promise.reject(new Error(result.message));
+        }
+    },
+    async  submitInfo({commit},{ tradeNo, data }){
+        let result = await submitOrder(tradeNo, data);
+        if (result.code == 200) {
+            commit('SUBMITINFO', result.data);
+            return 'ok';
+        } else {
             return Promise.reject(new Error(result.message));
         }
     },

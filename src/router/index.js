@@ -48,6 +48,7 @@ router.beforeEach(async (to,from,next)=>{
     let name = store.state.user.userInfo.name;
     //可以选择引入仓库或者直接判断本地token，我选择后者
     if(localStorage.getItem("TOKEN")){
+        // console.log(localStorage.getItem("TOKEN"));
         if(to.path === '/login' || to.path === '/register'){
             next('/home');
         }else{
@@ -55,11 +56,13 @@ router.beforeEach(async (to,from,next)=>{
                 next();
             }else{
                 try {
+                    // console.log(1);
+                    // let result = 
                     await store.dispatch('user/userInfo');
                     next();
                 } catch (error) {
                     //token失效了
-                    await store.dispatch('logout');
+                    await store.dispatch('user/userLogout');
                     next('/login');
                 }
             }
