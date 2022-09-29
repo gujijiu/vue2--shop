@@ -93,7 +93,8 @@
               </li>
             </ul>
           </div>
-          <Pagination style="text-align:center;" :pageNo="searchInfo.pageNo" :pageSize="searchParams.pageSize" :total="searchInfo.total" :totalPages="searchInfo.totalPages" :continues="5" @currentPage="currentPage"></Pagination>
+          <!-- <Pagination style="text-align:center;" :pageNo="searchInfo.pageNo" :pageSize="searchParams.pageSize" :total="searchInfo.total" :totalPages="searchInfo.totalPages" :continues="5" @currentPage="currentPage"></Pagination> -->
+          <Pagination style="text-align:center;" :pageNo="searchInfo.pageNo" :pageSize="searchParams.pageSize" :total="searchInfo.total" :continues="5" @currentPage="currentPage"></Pagination>
         </div>
       </div>
     </div>

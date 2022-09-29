@@ -143,6 +143,7 @@ import QRCode from "qrcode";
           //发请求获取支付结果
           let result = await this.$http.reqGetPayStatus(this.payInfo.orderId);
           //返回数据当中：code=200代表支付成功  code=205未支付
+          // if (result.code == 200 ||  true) {
           if (result.code == 200) {
             //支付成功了
             //存储一下支付成功的code数值，通过他判断支付是否成功

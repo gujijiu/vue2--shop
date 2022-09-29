@@ -14,33 +14,38 @@
 <script>
 export default {
     name:'Pagination',
-    props:['pageNo','pageSize','total','totalPages','continues'],
+    // props:['pageNo','pageSize','total','totalPages','continues'],
+    props:['pageNo','pageSize','total','continues'],
     computed:{
-        //计算出连续页码的起始数字与结束数字
-        startNumAndEndNum(){
-            const {continues,pageNo,totalPages} = this;
-            let start,end = 0;
-            let arr = [];
-            if(continues > totalPages){
-                start = 1;
-                end = totalPages;
-            }else{
-               start = pageNo - Math.floor(continues / 2);
-               end = pageNo + Math.floor(continues / 2);
-               if(start < 1){
-                   start = 1;
-                   end = continues;
-               }
-               if(end > totalPages){
-                   start = totalPages - continues + 1;
-                   end = totalPages;
-               }
-            }
-            for(let i = start;i <= end;i++ ){
-                arr.push(i);
-            }
-            return { start, end, arr };
-        },
+      totalPages() {
+        //向上取整数
+        return Math.ceil(this.total / this.pageSize);
+      },
+      //计算出连续页码的起始数字与结束数字
+      startNumAndEndNum(){
+          const {continues,pageNo,totalPages} = this;
+          let start,end = 0;
+          let arr = [];
+          if(continues > totalPages){
+              start = 1;
+              end = totalPages;
+          }else{
+              start = pageNo - Math.floor(continues / 2);
+              end = pageNo + Math.floor(continues / 2);
+              if(start < 1){
+                  start = 1;
+                  end = continues;
+              }
+              if(end > totalPages){
+                  start = totalPages - continues + 1;
+                  end = totalPages;
+              }
+          }
+          for(let i = start;i <= end;i++ ){
+              arr.push(i);
+          }
+          return { start, end, arr };
+      },
     },
 }
 </script>
