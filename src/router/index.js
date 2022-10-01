@@ -68,7 +68,17 @@ router.beforeEach(async (to,from,next)=>{
             }
         }
     }else{
-        next();
+        // next();
+        // console.log(to)
+        let toPath = to.path;
+        // const NoEntry = ['trade','pay','center'];
+        if (toPath.indexOf('trade') != -1 || toPath.indexOf('pay') != -1 || toPath.indexOf('center') != -1) {
+        // 未登录不可以去交易 支付相关以及个人中心
+        // if(to.path){
+            next('/login?redirect='+toPath);
+        }else{
+            next();
+        }
     }
 });
 
