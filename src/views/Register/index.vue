@@ -8,8 +8,14 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号" v-model="phone">
-        <span class="error-msg">错误提示信息</span>
+        <input
+          placeholder="请输入你的手机号"
+          v-model="phone"
+          name="phone"
+          v-validate="{ required: true, regex: /^1\d{10}$/ }"
+          :class="{ invalid: errors.has('phone') }"
+        />
+        <span class="error-msg">{{ errors.first("phone") }}</span>
       </div>
       <div class="content">
         <label>验证码:</label>
@@ -83,6 +89,9 @@
         }
       },
       async userRegister(){
+        //全部表单验证
+        // const success = await this.$validator.validateAll();
+        // if(success){}
         try {
           const {phone,code,password,truePassword,agree} = this;
           // if(this.agree && password === truePassword){};

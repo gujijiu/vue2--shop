@@ -28,6 +28,20 @@ import  * as http from '@/api';
 // 按需引入element-ui
 import { MessageBox  } from 'element-ui';
 
+import Gif from '@/assets/1.gif'
+//图片懒加载
+import VueLazyload from 'vue-lazyload';
+//注册组件
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  // error: errorimage,
+  loading: Gif,
+  attempt: 1
+});
+
+//引入表单校验插件
+import "@/plugins/validate";
+
 new Vue({
   render: h => h(App),
   //全局事件总线$bus配置

@@ -14,10 +14,19 @@ import Center from '@/views/Center';
 // 引入二级路由组件
 import MyOrder from '@/views/Center/myOrder';
 import TeamOrder from '@/views/Center/teamOrder';
+//5.0 默认路由懒加载吧  形式---》component: () => import("../views/Home/index.vue")
+// const foo = ()=>{
+//     return import("@/views/Home");
+// };
+/*
+当打包构建应用时，JavaScript包会变得非常大，影响页面加载。
+如果我们能把不同路由对应的阻件分害成不同的代码块，然后当路由被访问的时才加载对应组件，这样就更加高效了。
+*/
+
 export default[
     {
         path: '/home',
-        component: Home,
+        component: ()=>import("@/views/Home"),
         meta:{show: true}
     },
     {
