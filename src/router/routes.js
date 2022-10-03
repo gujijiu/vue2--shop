@@ -117,6 +117,54 @@ export default[
         ]
     },
     {
+        path: '/communication',
+        component: () => import('@/views/Communication/Communication'),
+        children: [
+          {
+            path: 'event',
+            component: () => import('@/views/Communication/EventTest/EventTest'),
+            meta: {
+             show: false
+            },
+          },
+          {
+            path: 'model',
+            component: () => import('@/views/Communication/ModelTest/ModelTest'),
+            meta: {
+                show: false
+            },
+          },
+          {
+            path: 'sync',
+            component: () => import('@/views/Communication/SyncTest/SyncTest'),
+            meta: {
+                show: false
+            },
+          },
+          {
+            path: 'attrs-listeners',
+            component: () => import('@/views/Communication/AttrsListenersTest/AttrsListenersTest'),
+            meta: {
+                show: false
+            },
+          },
+          {
+            path: 'children-parent',
+            component: () => import('@/views/Communication/ChildrenParentTest/ChildrenParentTest'),
+            meta: {
+                show: false
+            },
+          },
+          {
+            path: 'scope-slot',
+            component: () => import('@/views/Communication/ScopeSlotTest/ScopeSlotTest'),
+            meta: {
+                show: false
+            },
+          }
+        ],
+      },
+    {
         path:'/',
         redirect:'/home'
     }
